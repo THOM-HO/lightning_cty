@@ -1,12 +1,9 @@
 ({
 	
-    deleteData : function(component) {
-        
-        var action = component.get('c.deleteStudent');
-        action.setParams({ accId : component.get("v.currentStudentId") });
-        
-        console.log('==currentStudentId==');
-        console.log(component.get("v.currentStudentId"));
+    deleteStudentAll:function (cmp) {
+        console.log('listId: '+JSON.stringify(cmp.get("v.listId")));
+        var action = cmp.get('c.deleteAllStudent');
+        action.setParams({ listDelete : cmp.get("v.listId") });
         
         action.setCallback(this, function(actionResult){
             var state = actionResult.getState();
@@ -15,12 +12,12 @@
                 // Show message toast
                 var resultsToast = $A.get("e.force:showToast");
                 resultsToast.setParams({
-                    "title": "Delete",
+                    "title": "Delete All",
                     "type": "success",
-                    "message": "The record was deleted abc."
+                    "message": "Records was deleted."
                 });
                 resultsToast.fire();
-                $A.get('e.force:refreshView').fire();   
+                $A.get('e.force:refreshView').fire();  
             }else if (state === "ERROR") {
                 var errors = response.getError();
                 if (errors) {
@@ -39,6 +36,6 @@
             
         });
         
-        $A.enqueueAction(action);
-    }
+        $A.enqueueAction(action); 
+    },
 })

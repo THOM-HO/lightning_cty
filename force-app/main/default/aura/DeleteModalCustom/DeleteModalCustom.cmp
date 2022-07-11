@@ -4,11 +4,10 @@
         <aura:attribute name="Id" type="String"/>
     </aura:method>
     
+    <aura:handler name="reload_evt" event="c:student_reload_evt" action="{!c.handleReloadEvent}"/>
     <aura:attribute name="isModalOpen" type="boolean" default="false"/>
     <aura:attribute name="currentStudentId" type="String"/>
     
-    <!--Reload lại data sau khi bấm nút delete-->
-    <aura:registerEvent name="reload_evt" type="c:student_reload_evt"/>
     
     <div class="slds-m-around_xx-large">
         

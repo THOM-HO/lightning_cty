@@ -1,6 +1,6 @@
 <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
 access="global"
-controller="SearchComController">
+controller="SearchComController" extensible="true">
     <!-- attributes -->
     <aura:attribute name="students" type="Object"/>
     <aura:attribute name="columns" type="List"/>
@@ -14,6 +14,7 @@ controller="SearchComController">
     <aura:attribute name="totalSize" type="Integer"/>
     <aura:attribute name="paginationList" type="List"/>
     <aura:attribute name="currentPage" type="Integer" default="1"/>
+    <aura:attribute name="listSelectCheckbox" type="List"/>
 
     <!-- handlers-->
     <aura:handler name="init" value="{!this }" action="{! c.init }"/>
@@ -71,14 +72,17 @@ controller="SearchComController">
             columns="{! v.columns }"
             data="{! v.students }"
             keyField="id"
-            onrowaction="{! c.handleRowAction }"/>
+            onrowaction="{! c.handleRowAction }"
+            onrowselection="{! c.deleteSelectedAll}"
+            />
+            <!-- hideCheckboxColumn="true" -->
         
         <lightning:card class="groupButton">
             <lightning:button label="Trang đầu" disabled="{!v.currentPage == 1}"  onclick="{!c.first}" />
             <lightning:button label="Trang trước" disabled="{!v.currentPage == 1}"  onclick="{!c.previous}" />
             <!-- <aura:iteration items="{!v.paginationList}" var="item"> -->
                 <!-- <lightning:button label="{!item}"  onclick="{!c.getPage}" /> -->
-                <lightning:button label="{!v.currentPage}"  onclick="{!c.getPage}" />
+                <lightning:button label="{!v.currentPage}"  />
             <!-- </aura:iteration> -->
             <lightning:button label="Trang sau" disabled="{!v.currentPage >= v.totalSize}" onclick="{!c.next}" />
             <lightning:button label="Trang cuối" disabled="{!v.currentPage >= v.totalSize}" onclick="{!c.last}" />
@@ -89,6 +93,7 @@ controller="SearchComController">
     <c:CreateModalCustom aura:id="create_student_modal" />
     <c:EditModalCustom aura:id="edit_student_modal" />
     <c:DeleteModalCustom aura:id="confirm_delete_modal" />
+    <c:DeleteAllModalCustom aura:id="confirm_deleteAll_modal" />
     <c:DetailModalCustom aura:id="detail_student_modal" />
     
 </aura:component>

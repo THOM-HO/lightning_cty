@@ -1,12 +1,12 @@
 ({
-    getStudents: function (component) {
-        var action = component.get('c.queryStudent');
-        action.setParams({ lastName : component.get("v.name"), 
-                        isSort : component.get("v.isSort"),
-                        classId: component.get("v.class"),
-                        startBirthday:component.get("v.startBirthday"),
-                        endBirthday: component.get("v.endBirthday") ,
-                        currentPage:component.get("v.currentPage")
+    getStudents: function (cmp) {
+        var action = cmp.get('c.queryStudent');
+        action.setParams({ lastName : cmp.get("v.name"), 
+                        isSort : cmp.get("v.isSort"),
+                        classId: cmp.get("v.class"),
+                        startBirthday:cmp.get("v.startBirthday"),
+                        endBirthday: cmp.get("v.endBirthday") ,
+                        currentPage:cmp.get("v.currentPage")
                     });
         action.setCallback(this, function(actionResult){
             var state = actionResult.getState();
@@ -16,24 +16,38 @@
             {
                 let listResult = actionResult.getReturnValue();
                 for(let student of listResult){
-                    const source = { isSelected: false};
-                    Object.assign(student, source, { GioiTinh__c: student.GioiTinh__c ? "Nam" : "Nữ" });
+                    // const source = { isSelected: false};
+                    Object.assign(student,{ GioiTinh__c: student.GioiTinh__c ? "Nam" : "Nữ" });
                     listStudent.push(student);
                 }
-                component.set('v.students', listStudent);
+                cmp.set('v.students', listStudent);
+            }else if (state === "ERROR") {
+                var errors = response.getError();
+                if (errors) {
+                    if (errors[0] && errors[0].message) {
+                        var toastEvent = $A.get("e.force:showToast");
+                        toastEvent.setParams({
+                            "title": "Error!",
+                            "message": errors[0].message
+                        });
+                        toastEvent.fire();
+                    }
+                } else {
+                    console.log("Unknown error");
+                }
             }
         });
         $A.enqueueAction(action);
         
     },
 
-    getCountStudent: function (component) {
-        var action = component.get('c.countStudent');
-        action.setParams({ lastName : component.get("v.name"), 
-                        isSort : component.get("v.isSort"),
-                        classId: component.get("v.class"),
-                        startBirthday:component.get("v.startBirthday"),
-                        endBirthday: component.get("v.endBirthday") });
+    getCountStudent: function (cmp) {
+        var action = cmp.get('c.countStudent');
+        action.setParams({ lastName : cmp.get("v.name"), 
+                        isSort : cmp.get("v.isSort"),
+                        classId: cmp.get("v.class"),
+                        startBirthday:cmp.get("v.startBirthday"),
+                        endBirthday: cmp.get("v.endBirthday") });
         action.setCallback(this, function(actionResult){
             var state = actionResult.getState();
             console.log('===state get count  students===' + state);
@@ -41,12 +55,26 @@
             if (state === "SUCCESS")
             {
                 var countStudent = actionResult.getReturnValue();
-                component.set('v.countStudent', countStudent);
+                cmp.set('v.countStudent', countStudent);
                 //totalSize
                 var totalSize= Math.ceil(countStudent/5);
-                component.set('v.totalSize', totalSize);
-                component.set('v.paginationList', Array.from(Array(totalSize)).map((a,b)=>b+1));
+                cmp.set('v.totalSize', totalSize);
+                cmp.set('v.paginationList', Array.from(Array(totalSize)).map((a,b)=>b+1));
 
+            }else if (state === "ERROR") {
+                var errors = response.getError();
+                if (errors) {
+                    if (errors[0] && errors[0].message) {
+                        var toastEvent = $A.get("e.force:showToast");
+                        toastEvent.setParams({
+                            "title": "Error!",
+                            "message": errors[0].message
+                        });
+                        toastEvent.fire();
+                    }
+                } else {
+                    console.log("Unknown error");
+                }
             }
         });
         $A.enqueueAction(action);
@@ -81,11 +109,4 @@
         
     },
 
-    removeBook: function (cmp, row) {
-        var rows = cmp.get('v.data');
-        var rowIndex = rows.indexOf(row);
-
-        rows.splice(rowIndex, 1);
-        cmp.set('v.data', rows);
-    }
 });

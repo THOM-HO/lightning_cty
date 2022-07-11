@@ -16,6 +16,6 @@
          "title": "Student Update",
          "message": "Record ID: " + event.getParam("id")
      });
-      helper.reloadList(component);
+     $A.get('e.force:refreshView').fire();
   },   
 })

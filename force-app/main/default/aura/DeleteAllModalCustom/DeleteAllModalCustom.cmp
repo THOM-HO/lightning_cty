@@ -1,12 +1,12 @@
 <aura:component controller="SearchComController">
     
-    <aura:method name ="getModalRecordData" action="{!c.getModalRecordData}">
-        <aura:attribute name="Id" type="String"/>
+    <aura:method name ="confirmDeleteModal" action="{!c.confirmDeleteModal}">
+        <aura:attribute name="listId" type="List"/>
     </aura:method>
-
-    <aura:attribute name="fields" type="String[]" default="['HoHocSinh__c','TenHocSinh__c','GioiTinh__c','NgaySinh__c','Diem1__c','Diem2__c','Diem3__c','Lop__c']" />
+    <aura:handler name="reload_evt" event="c:student_reload_evt" action="{!c.handleReloadEvent}"/>
     <aura:attribute name="isModalOpen" type="boolean" default="false"/>
-    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="listId" type="List" />
+    
     
     <div class="slds-m-around_xx-large">
         
@@ -23,20 +23,31 @@
                                               alternativeText="close"
                                               variant="bare-inverse"
                                               class="slds-modal__close"/>
-                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Update Student</h2>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Delete Student</h2>
                     </header>
                     <!--HEADER END-->
                     
                     <!--NOI DUNG START-->
                     <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                         <lightning:notificationsLibrary aura:id="notifLib"/>
                         
-                        <lightning:recordForm
-                        recordId="{!v.recordId}"
-                        objectApiName="HocSinh__c"
-                        fields="{!v.fields}"
-                        onsuccess="{!c.handleSuccess}" />  
+                        <p>Bạn có chắc muốn xóa ?</p>
+                        
                     </div>
+                    <!--NOI DUNG END-->
+                    
+                    <!--FOOTER START-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral"
+                                          label="No"
+                                          title="No"
+                                          onclick="{!c.closeModel}"/>
+                        <lightning:button variant="brand"
+                                          label="Yes"
+                                          title="Yes"
+                                          onclick="{!c.deleteAllRecordData}"/>
+                    </footer>
+                    <!--FOOTER END-->
+                    
                 </div>
             </section>
             <div class="slds-backdrop slds-backdrop_open"></div>

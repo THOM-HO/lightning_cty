@@ -4,6 +4,13 @@ public with sharing class SearchComController {
     public static void deleteStudent(String accId){
         Database.delete(accId);
     }
+
+    @AuraEnabled
+    public static void deleteAllStudent(List<String> listDelete){
+        // System.debug('list'+listDelete);
+        List<HocSinh__c> students = [SELECT Id FROM HocSinh__c WHERE Id IN:listDelete];
+        delete students;
+    }
     
     @AuraEnabled
     public  static List<HocSinh__c> queryStudent(String lastName,Boolean isSort,String classId,Date startBirthday, Date endBirthday ,Integer currentPage){
@@ -11,7 +18,7 @@ public with sharing class SearchComController {
             String queryStudent='SELECT Id, MaHocSinh__c, HoHocSinh__c, TenHocSinh__c, NgaySinh__c, GioiTinh__c, Diem1__c, Diem2__c,Diem3__c, DiemTB__c,TinhTrang__c FROM  HocSinh__c';
             // rap điều kiện
             queryStudent= createStringQuery(queryStudent,lastName, classId, startBirthday, endBirthday );
-            System.debug('queryStudent'+queryStudent);
+            // System.debug('queryStudent'+queryStudent);
             if(isSort){
                 queryStudent += ' ORDER BY TenHocSinh__c  ';
             }else{

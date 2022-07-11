@@ -14,9 +14,6 @@
    
    confirmDeleteModal: function(component, event, helper) {
       var params = event.getParam('arguments');
-      
-      console.log('==params.Id==' + params.Id);
-      
       component.set("v.currentStudentId", params.Id);
       // hien thi modal 
       component.set("v.isModalOpen", true);

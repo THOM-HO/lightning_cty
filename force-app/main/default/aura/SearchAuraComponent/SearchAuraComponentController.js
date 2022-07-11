@@ -38,14 +38,13 @@
             case 'update':
                 // alert('Showing update: ' + JSON.stringify(row));
                 var recordId = row.Id;
-                console.log('==recordId==' + row.Id);
                 cmp.find('edit_student_modal').getModalRecordData(recordId);
                 break;
         }
     },
 
     search: function(cmp, event, helper) {
-        cmp.set('v.pageCurrent', 1);
+        cmp.set('v.currentPage', 1);
         helper.getStudents(cmp);
         helper.getCountStudent(cmp);
     },
@@ -55,7 +54,7 @@
     },
 
     handleReloadEvent: function(cmp, event, helper) {
-        console.log('==handleReloadEvent==');
+        cmp.set('v.currentPage', 1);
         helper.getStudents(cmp);
         helper.getCountStudent(cmp);
         helper.getClass(cmp);
@@ -68,19 +67,32 @@
 
     next:function(cmp, event, helper) {
         cmp.set('v.currentPage', cmp.get('v.currentPage') + 1);
-        console.log('page'+cmp.get('v.currentPage'));
         helper.getStudents(cmp);
     },
 
     previous:function(cmp, event, helper) {
         cmp.set('v.currentPage', cmp.get('v.currentPage') - 1);
-        console.log('page'+cmp.get('v.currentPage'));
         helper.getStudents(cmp);
     },
 
     last:function(cmp, event, helper) {
         cmp.set('v.currentPage',  cmp.get('v.totalSize'));
         helper.getStudents(cmp);
+    },
+
+    deleteSelectedAll:function(cmp, event, helper) {
+        var selectedRows = event.getParam('selectedRows');
+        var listId = [];
+        for (const item of selectedRows) {
+            listId.push(item.Id);
+          }
+        cmp.set('v.listSelectCheckbox', listId);
+    },
+
+    deleteAll:function(cmp, event, helper) {
+        var listId = cmp.get('v.listSelectCheckbox') ;
+        console.log(listId);
+        cmp.find('confirm_deleteAll_modal').confirmDeleteModal(listId);
     },
     
 });

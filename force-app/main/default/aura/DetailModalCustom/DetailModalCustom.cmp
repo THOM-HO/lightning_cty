@@ -8,8 +8,6 @@
     <aura:attribute name="isModalOpen" type="boolean" default="false"/>
     <aura:attribute name="recordId" type="String"/>
     
-    <!--Reload lại data sau khi bấm nút save-->
-    <aura:registerEvent name="reload_evt" type="c:student_reload_evt"/>
     
     <div class="slds-m-around_xx-large">
         

@@ -8,14 +8,13 @@
     },
 
     handleSuccess : function(component, event, helper) {
-      helper.reloadList(component);
       component.set("v.isModalOpen", false);
       component.find('notifLib').showToast({
          "variant": "success",
          "title": "Student Created",
          "message": "Record ID: " + event.getParam("id")
      });
-       
+     $A.get('e.force:refreshView').fire();
   }
      
  })
